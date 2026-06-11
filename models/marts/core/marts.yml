@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: dim_taxi_zone
+    description: "Taxi zone dimension with a deterministic surrogate key, built from staging lookup."
+    columns:
+      - name: taxi_zone_sk
+        description: "Surrogate key for the taxi zone (generated from zone_id)."
+        tests:
+          - not_null
+          - unique
+      - name: zone_id
+        description: "Taxi zone identifier (location_id from staging)."
+        tests:
+          - not_null
+          - unique
+      - name: zone_name
+        description: "Zone name."
+      - name: borough
+        description: "Borough containing the taxi zone."
+        tests:
+          - not_null
+      - name: service_zone
+        description: "Service zone classification for the taxi zone."
+
+  - name: dim_date
+    description: "Date dimension generated automatically from the pickup/dropoff date range in taxi trips."
+    columns:
+      - name: date_day
+        description: "Calendar day."
+      - name: year
+        description: "Calendar year."
+      - name: quarter
+        description: "Calendar quarter (1-4)."
+      - name: month
+        description: "Calendar month (1-12)."
+      - name: week
+        description: "Week of year."
+      - name: day_of_week
+        description: "Day of week as returned by Snowflake DAYOFWEEK (0-6 depending on settings)."
+      - name: is_weekend
+        description: "True if day is weekend."
+      - name: fiscal_year
+        description: "Fiscal year derived from date_day using the fiscal_year macro."

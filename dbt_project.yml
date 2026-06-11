@@ -1,4 +1,3 @@
-
 name: 'first_project'
 version: '1.0.0'
 config-version: 2
@@ -18,17 +17,22 @@ clean-targets:
 
 models:
   first_project:
-    +database: "{{ env_var('DBT_TARGET_DATABASE', 'MARTS') }}"
+    +database: "{{ env_var('DBT_TARGET_DATABASE', 'RAW') }}"
+
     staging:
       +database: "{{ env_var('DBT_STAGING_DATABASE', 'RAW') }}"
       +schema: TAXI
       +materialized: view
       taxi:
         +materialized: view
+
     intermediate:
       +database: "{{ env_var('DBT_INTERMEDIATE_DATABASE', 'INTERMEDIATE') }}"
       +schema: TAXI
       +materialized: view
 
-vars:
-  environment: production
+    core:
+      +database: "{{ env_var('DBT_TARGET_DATABASE', 'RAW') }}"
+      +schema: TAXI
+      +materialized: view
+

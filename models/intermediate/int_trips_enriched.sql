@@ -28,6 +28,8 @@ select
     vendor_id,
     pickup_at,
     dropoff_at,
+    pickup_date,
+    dropoff_date,
     passenger_count,
     trip_distance_miles,
     rate_code_id,
