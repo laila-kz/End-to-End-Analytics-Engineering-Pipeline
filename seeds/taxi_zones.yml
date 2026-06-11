@@ -1,0 +1,19 @@
+version: 2
+
+seeds:
+  - name: taxi_zones
+    description: "Lookup seed for taxi zone metadata used by staging and intermediate models."
+    columns:
+      - name: location_id
+        description: "Numeric identifier for the taxi zone."
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "Borough that contains the taxi zone."
+        tests:
+          - not_null
+      - name: zone
+        description: "Taxi zone name."
+      - name: service_zone
+        description: "Service classification for the taxi zone."

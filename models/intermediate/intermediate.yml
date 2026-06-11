@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: int_trips_enriched
+    description: "Intermediate taxi trip enrichment model that adds business metrics, time dimensions, zone lookups, and payment type descriptions."
+    columns:
+      - name: trip_key
+        description: "Unique surrogate key for each taxi trip."
+        tests:
+          - unique
+          - not_null
+      - name: pickup_at
+        description: "Timestamp when the taxi trip started."
+        tests:
+          - not_null
+      - name: dropoff_at
+        description: "Timestamp when the taxi trip ended."
+        tests:
+          - not_null
+      - name: trip_duration_minutes
+        description: "Calculated trip duration in minutes from pickup to dropoff."
+      - name: trip_duration_hours
+        description: "Calculated trip duration in hours from pickup to dropoff."
+      - name: average_speed_mph
+        description: "Average trip speed in miles per hour, based on distance and duration."
+      - name: revenue_before_tip
+        description: "Trip revenue before tip, derived from the total amount charged to the passenger."
+      - name: revenue_with_tip
+        description: "Trip revenue including tip."
+      - name: trip_distance_bucket
+        description: "Distance bucket for trips, used for analysis of short, medium, and long trips."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['< 1', '1-3', '3-6', '6-10', '10+']
+      - name: pickup_hour
+        description: "Hour of day when the trip began."
+      - name: pickup_day_of_week
+        description: "Day of week when the trip began."
+      - name: pickup_month
+        description: "Month when the trip began."
+      - name: pickup_year
+        description: "Year when the trip began."
+      - name: pickup_borough
+        description: "Borough for the pickup taxi zone."
+      - name: dropoff_borough
+        description: "Borough for the dropoff taxi zone."
+      - name: payment_code
+        description: "Numeric code representing the payment type."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 4, 5, 6]
+      - name: payment_type_description
+        description: "Human-readable description of the payment type."
+      - name: pickup_zone_id
+        description: "Taxi zone ID where the trip started."
+        tests:
+          - not_null
+      - name: dropoff_zone_id
+        description: "Taxi zone ID where the trip ended."
+        tests:
+          - not_null

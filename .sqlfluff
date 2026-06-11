@@ -1,0 +1,6 @@
+[sqlfluff]
+dialect = snowflake
+templater = dbt
+
+[sqlfluff:templater:dbt]
+profiles_dir = .

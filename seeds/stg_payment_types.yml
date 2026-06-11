@@ -1,0 +1,13 @@
+version: 2
+
+seeds:
+  - name: stg_payment_types
+    description: "Lookup table for taxi payment type codes and their human-readable descriptions."
+    columns:
+      - name: payment_code
+        description: "Numeric code for the payment method."
+        tests:
+          - unique
+          - not_null
+      - name: payment_type_description
+        description: "Human-readable description of the payment type."

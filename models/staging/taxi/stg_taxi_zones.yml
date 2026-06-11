@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_taxi_zones
+    description: "Staging model for taxi zone lookup data that standardizes raw source columns."
+    columns:
+      - name: location_id
+        description: "Unique numeric identifier for each taxi zone."
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "Name of the borough containing the taxi zone."
+        tests:
+          - not_null
+      - name: zone
+        description: "Taxi zone name for the pickup or dropoff location."
+      - name: service_zone
+        description: "High-level service area classification for the zone."
