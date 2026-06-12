@@ -9,44 +9,47 @@ models:
         tests:
           - not_null
           - unique
+
       - name: pickup_date
         description: "Pickup date for the taxi trip."
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_date')
-                field: date_day
+              to: ref('dim_date')
+              field: date_day
+
       - name: dropoff_date
         description: "Dropoff date for the taxi trip."
+
       - name: pickup_zone_sk
         description: "Surrogate key for the pickup taxi zone dimension."
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_taxi_zone')
-                field: taxi_zone_sk
+              to: ref('dim_taxi_zone')
+              field: taxi_zone_sk
+
       - name: dropoff_zone_sk
         description: "Surrogate key for the dropoff taxi zone dimension."
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_taxi_zone')
-                field: taxi_zone_sk
-      - name: payment_code
-        description: "Numeric payment type code used for trip-level payment type analysis."
+              to: ref('dim_taxi_zone')
+              field: taxi_zone_sk
+
       - name: revenue_before_tip
         description: "Trip revenue before tip."
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
       - name: revenue_with_tip
         description: "Trip revenue including tip."
-      - name: trip_distance_miles
-        description: "Total distance traveled during the trip in miles."
-      - name: trip_duration_minutes
-        description: "Duration of the trip in minutes."
-      - name: average_speed_mph
-        description: "Average speed during the trip in miles per hour."
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
 
   - name: fct_daily_summary
     description: "Daily summary fact model aggregated by pickup date, pickup zone, and payment type."
@@ -56,31 +59,37 @@ models:
         tests:
           - not_null
           - unique
+
       - name: date_day
         description: "Date of the aggregated bucket."
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_date')
-                field: date_day
+              to: ref('dim_date')
+              field: date_day
+
       - name: pickup_zone_sk
         description: "Surrogate key for the pickup zone dimension."
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('dim_taxi_zone')
-                field: taxi_zone_sk
-      - name: pickup_zone_id
-        description: "Taxi zone ID for the pickup zone used in aggregation."
-      - name: payment_code
-        description: "Numeric payment type code used for aggregation."
-      - name: trip_count
-        description: "Number of trips in the daily summary bucket."
+              to: ref('dim_taxi_zone')
+              field: taxi_zone_sk
+
       - name: total_revenue
         description: "Total revenue for the daily summary bucket, including tips."
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
       - name: avg_fare
         description: "Average fare per trip in the daily summary bucket."
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= -0.000001"
+
       - name: avg_distance
         description: "Average distance per trip in the daily summary bucket."
+

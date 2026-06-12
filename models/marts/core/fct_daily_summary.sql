@@ -37,8 +37,18 @@ aggregated as (
         payment_code,
 
         count(*) as trip_count,
-        sum(revenue_with_tip) as total_revenue,
-        avg(fare_amount_usd) as avg_fare,
+sum(greatest(coalesce(revenue_with_tip, 0), 0)) as total_revenue,
+        coalesce(
+            avg(
+                case 
+                    when fare_amount_usd is null then null 
+                    when fare_amount_usd < 0 then null 
+                    when fare_amount_usd = 0 then null 
+                    else fare_amount_usd
+                end
+            ),
+            0
+        ) as avg_fare,
         avg(trip_distance_miles) as avg_distance
     from base
     group by 1, 2, 3

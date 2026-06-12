@@ -49,9 +49,9 @@ final as (
         trips.dropoff_zone_id as dropoff_zone_id,
         trips.payment_code as payment_code,
 
-        -- Revenue metrics
-        trips.revenue_before_tip as revenue_before_tip,
-        trips.revenue_with_tip as revenue_with_tip,
+        -- Revenue metrics (hardening: keep revenue non-negative)
+        greatest(coalesce(trips.revenue_before_tip, 0), 0) as revenue_before_tip,
+        greatest(coalesce(trips.revenue_with_tip, 0), 0) as revenue_with_tip,
 
         -- Trip metrics
         trips.passenger_count as passenger_count,

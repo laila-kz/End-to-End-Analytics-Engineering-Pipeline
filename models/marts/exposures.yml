@@ -1,0 +1,12 @@
+exposures:
+  - name: revenue_dashboard
+    label: Revenue Dashboard
+    description: "Revenue Dashboard in Metabase tracking daily and trip-level revenue metrics for business reporting."
+    type: dashboard
+    owner:
+      name: Analytics Team
+      email: analytics@example.com
+    url: https://metabase.example.com/dashboard/revenue
+    depends_on:
+      - ref('fct_trips')
+      - ref('fct_daily_summary')
