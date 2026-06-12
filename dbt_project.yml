@@ -31,8 +31,3 @@ models:
       +schema: TAXI
       +materialized: view
 
-    core:
-      +database: "{{ env_var('DBT_TARGET_DATABASE', 'RAW') }}"
-      +schema: TAXI
-      +materialized: view
-

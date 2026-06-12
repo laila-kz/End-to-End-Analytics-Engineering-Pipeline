@@ -26,8 +26,8 @@ sources:
 
     config:
       freshness:
-        warn_after:  {count: 25, period: hour}   # Warn if no new data in 25 hours
-        error_after: {count: 49, period: hour}   # Error if no new data in 49 hours
+        warn_after: null           # Don't warn (static dev data)
+        error_after: null          # Don't error (static dev data)
       loaded_at_field: 'VARIANT_COL:"_LOADED_AT"'
 
     tables:
@@ -45,96 +45,12 @@ sources:
         # Override freshness per-table (trips is loaded daily, zones are static)
         config:
           freshness:
-            warn_after:  {count: 25, period: hour}
-            error_after: {count: 49, period: hour}
+            warn_after: null
+            error_after: null
 
         columns:
-          - name: VENDORID
+          - name: VARIANT_COL
             description: >
-              ID of the TPEP (Taxicab & Limousine Commission Electronic Payment)
-              provider that provided the record. 1=Creative Mobile Technologies, 2=VeriFone Inc.
-
-          - name: TPEP_PICKUP_DATETIME
-            description: Date and time when the meter was engaged (trip started)
-            tests:
-              - not_null
-
-          - name: TPEP_DROPOFF_DATETIME
-            description: Date and time when the meter was disengaged (trip ended)
-            tests:
-              - not_null
-
-          - name: PASSENGER_COUNT
-            description: Number of passengers in the vehicle (driver-entered value)
-
-          - name: TRIP_DISTANCE
-            description: Elapsed trip distance in miles reported by the taximeter
-
-          - name: RATECODEID
-            description: >
-              Final rate code in effect at end of trip.
-              1=Standard rate, 2=JFK, 3=Newark, 4=Nassau/Westchester,
-              5=Negotiated fare, 6=Group ride
-
-          - name: STORE_AND_FWD_FLAG
-            description: >
-              Whether the trip record was held in vehicle memory before sending to vendor
-              because vehicle did not have a server connection (Y=store and forward, N=not)
-
-          - name: PULOCATIONID
-            description: TLC Taxi Zone ID where the meter was engaged (pickup location)
-            tests:
-              - not_null
-
-          - name: DOLOCATIONID
-            description: TLC Taxi Zone ID where the meter was disengaged (dropoff location)
-            tests:
-              - not_null
-
-          - name: PAYMENT_TYPE
-            description: >
-              Numeric code for how the passenger paid.
-              1=Credit card, 2=Cash, 3=No charge, 4=Dispute, 5=Unknown, 6=Voided trip
-
-          - name: FARE_AMOUNT
-            description: >
-              Time-and-distance fare calculated by the meter (does not include tips,
-              surcharges, or tolls)
-
-          - name: EXTRA
-            description: >
-              Miscellaneous extras and surcharges. Currently includes only the
-              $0.50 and $1 rush hour and overnight charges
-
-          - name: MTA_TAX
-            description: $0.50 MTA tax that is automatically triggered based on the metered rate
-
-          - name: TIP_AMOUNT
-            description: >
-              Tip amount. This field is automatically populated for credit card tips.
-              Cash tips are not included.
-
-          - name: TOLLS_AMOUNT
-            description: Total amount of all tolls paid in trip
-
-          - name: IMPROVEMENT_SURCHARGE
-            description: $0.30 improvement surcharge assessed trips at the flag drop
-
-          - name: TOTAL_AMOUNT
-            description: Total amount charged to passengers (does not include cash tips)
-
-          - name: CONGESTION_SURCHARGE
-            description: >
-              Total amount collected in trip for NYS congestion surcharge
-              ($2.50 for shared rides, $2.75 for non-shared rides into Manhattan below 96th St)
-
-          - name: AIRPORT_FEE
-            description: >
-              $1.25 for pick up only at LaGuardia and John F. Kennedy Airports
-
-          - name: _LOADED_AT
-            description: Timestamp when this row was loaded into Snowflake (metadata column)
-
-          - name: _SOURCE_FILE
-            description: Name of the source Parquet file this row came from (metadata column)
+              Semi-structured data column containing JSON with taxi trip details.
+              Accessed via VARIANT_COL:"column_name" syntax in SQL.
 

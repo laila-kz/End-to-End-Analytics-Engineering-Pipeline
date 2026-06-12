@@ -1,6 +1,0 @@
-sql: |
-  select column_name, data_type
-  from RAW.information_schema.columns
-  where table_schema = 'TAXI'
-    and table_name = 'TRIPS'
-  order by ordinal_position

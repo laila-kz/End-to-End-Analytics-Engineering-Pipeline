@@ -31,7 +31,11 @@ __pycache__/
 
 # ------------------------------
 # Data files often produced/used locally
+# (but seeds are version controlled - see exception below)
 # ------------------------------
 *.csv
 *.xlsx
+
+# Exception: Always track dbt seeds
+!seeds/*.csv
 
