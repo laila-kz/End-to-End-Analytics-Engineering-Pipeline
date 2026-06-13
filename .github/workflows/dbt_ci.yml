@@ -27,15 +27,14 @@ jobs:
         run: |
           dbt deps
 
-      - name: dbt run (modified)
+      - name: dbt run
         env:
           DBT_PROFILES_DIR: ${{ github.workspace }}
         run: |
-          dbt run --select state:modified+ --state target
+          dbt run
 
-      - name: dbt test (modified)
+      - name: dbt test
         env:
           DBT_PROFILES_DIR: ${{ github.workspace }}
         run: |
-          dbt test --select state:modified+ --state target
-
+          dbt test
