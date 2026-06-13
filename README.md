@@ -78,51 +78,55 @@ flowchart TB
   ├── workflows/
   │   ├── dbt_ci.yml
   │   └── dbt_docs.yml
-first_project/
-  ├── analyses/
-  ├── macros/
-  │   ├── fiscal_year.sql
-  │   ├── generate_schema_name.sql
-  │   └── generate_surrogate_key.sql
-  ├── models/
-  │   ├── intermediate/
-  │   │   ├── int_trips_enriched.sql
-  │   │   └── intermediate.yml
-  │   ├── marts/
-  │   │   └── core/
-  │   │       ├── dim_date.sql
-  │   │       ├── dim_taxi_zone.sql
-  │   │       ├── fct_daily_summary.sql
-  │   │       ├── fct_trips.sql
-  │   │       └── marts.yml
-  │   └── staging/
-  │       └── taxi/
-  │           ├── _taxi_sources.yml
-  │           ├── stg_taxi_zones.sql
-  │           ├── stg_taxi_zones.yml
-  │           ├── stg_trips.sql
-  │           └── stg_trips.yml
-  ├── package-lock.yml
-  ├── packages.yml
-  ├── README.md
-  ├── requirements.txt
-  ├── seeds/
-  │   ├── stg_payment_types.csv
-  │   ├── stg_payment_types.yml
-  │   ├── taxi_zones.csv
-  │   └── taxi_zones.yml
-  ├── snapshots/
-  └── tests/
+docs/
+  ├── dashboard/
+  ├── diagrams/
+  └── README.md
+analyses/
+macros/
+  ├── fiscal_year.sql
+  ├── generate_schema_name.sql
+  └── generate_surrogate_key.sql
+models/
+  ├── intermediate/
+  │   ├── int_trips_enriched.sql
+  │   └── intermediate.yml
+  ├── marts/
+  │   └── core/
+  │       ├── dim_date.sql
+  │       ├── dim_taxi_zone.sql
+  │       ├── fct_daily_summary.sql
+  │       ├── fct_trips.sql
+  │       └── marts.yml
+  └── staging/
+      └── taxi/
+          ├── _taxi_sources.yml
+          ├── stg_taxi_zones.sql
+          ├── stg_taxi_zones.yml
+          ├── stg_trips.sql
+          └── stg_trips.yml
+package-lock.yml
+packages.yml
+README.md
+requirements.txt
+seeds/
+  ├── stg_payment_types.csv
+  ├── stg_payment_types.yml
+  ├── taxi_zones.csv
+  └── taxi_zones.yml
+snapshots/
+tests/
 ```
 
 ### Folder purpose
 
 - `.github/workflows/`: CI/CD definitions for dbt validation and documentation deployment.
-- `first_project/models/`: dbt SQL models organized by layer.
-- `first_project/macros/`: reusable SQL macros, including surrogate key generation and fiscal year logic.
-- `first_project/seeds/`: static lookup datasets for payment types and taxi zones.
-- `first_project/tests/`: dbt tests and custom assertions.
 - `docs/`: documentation and architecture artifacts for the project.
+- `analyses/`: ad hoc analysis files and dbt exploration scripts.
+- `macros/`: reusable SQL macros, including surrogate key generation and fiscal year logic.
+- `models/`: dbt SQL models organized by staging, intermediate, and marts layers.
+- `seeds/`: static lookup datasets for payment types and taxi zones.
+- `tests/`: dbt tests and custom assertions.
 
 ---
 
@@ -219,7 +223,7 @@ This repository includes two GitHub Actions workflows:
 The CI workflow performs:
 - checkout of repository code
 - Python setup
-- dependency installation from `first_project/requirements.txt`
+- dependency installation from `requirements.txt`
 - `dbt deps`
 - `dbt run --select state:modified+ --state target`
 - `dbt test --select state:modified+ --state target`
@@ -234,7 +238,7 @@ The docs workflow performs:
 - dependency installation
 - `dbt deps`
 - `dbt docs generate`
-- upload `first_project/target` as artifact for GitHub Pages deployment
+- upload `target` as artifact for GitHub Pages deployment
 
 ### Workflow diagram
 
@@ -257,14 +261,12 @@ This project uses dbt's built-in documentation generation.
 To generate docs locally:
 
 ```bash
-cd "first_project"
 dbt docs generate
 ```
 
 To serve docs locally:
 
 ```bash
-cd "first_project"
 dbt docs serve
 ```
 
@@ -280,21 +282,10 @@ The project includes a dbt exposure for a Metabase revenue dashboard.
 
 ### Dashboard Overview
 
-[Insert Screenshot]
+![NYC Taxi Analytics Dashboard](docs/dashboard/nyc_taxi_analytics_dashboard.png)
 
 Caption: Summary view of daily revenue, trip counts, and payment mix for NYC taxi trips.
 
-### Trip Analytics
-
-[Insert Screenshot]
-
-Caption: Trip-level analytics showing distance buckets, average speed, and payment type performance.
-
-### Daily Summary
-
-[Insert Screenshot]
-
-Caption: Daily summary view for revenue, average fare, and zone-level trends.
 
 ### KPIs and business metrics
 
@@ -310,8 +301,8 @@ Caption: Daily summary view for revenue, average fare, and zone-level trends.
 ## How to Run the Project
 
 ```bash
-git clone <repo-url> "nyc-taxi-revenue-analytics"
-cd "nyc-taxi-revenue-analytics/first_project"
+git clone https://github.com/laila-kz/end-to-end-analytics-engineering-pipeline.git
+
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
