@@ -5,70 +5,90 @@ models:
     description: |
       Standardized taxi trip records with raw source fields cleaned and typed.
       This model performs casting, timestamp conversion, and business-friendly naming.
+
     columns:
       - name: trip_key
         description: Unique hashed key for each taxi trip record.
         tests:
           - not_null
           - unique
+
       - name: vendor_id
         description: Numeric vendor identifier for the taxi trip.
         tests:
           - not_null
+
       - name: pickup_at
         description: Pickup timestamp for the taxi trip.
         tests:
           - not_null
+
       - name: dropoff_at
         description: Dropoff timestamp for the taxi trip.
         tests:
           - not_null
+
       - name: passenger_count
         description: Number of passengers on the trip.
+
       - name: trip_distance_miles
         description: Trip distance in miles.
+
       - name: rate_code_id
         description: Numeric rate code for the trip.
+
       - name: store_and_forward_flag
         description: Store and forward flag indicating whether the trip data was stored before being forwarded.
         tests:
           - accepted_values:
-              arguments:
-                values: ['Y', 'N']
+              values: ['Y', 'N']
+
       - name: pickup_zone_id
         description: TLC pickup zone identifier.
         tests:
           - not_null
+
       - name: dropoff_zone_id
         description: TLC dropoff zone identifier.
         tests:
           - not_null
+
       - name: payment_code
         description: Payment type code for the trip.
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [0, 1, 2, 3, 4, 5, 6]
+              values: [0, 1, 2, 3, 4, 5, 6]
+
       - name: fare_amount_usd
         description: Fare amount in USD.
+
       - name: extra_amount_usd
         description: Additional charges in USD.
+
       - name: mta_tax_usd
         description: MTA tax amount in USD.
+
       - name: tip_amount_usd
         description: Tip amount in USD.
+
       - name: tolls_amount_usd
         description: Toll amount in USD.
+
       - name: improvement_surcharge_usd
         description: Improvement surcharge amount in USD.
+
       - name: total_amount_usd
         description: Total trip amount in USD.
+
       - name: congestion_surcharge_usd
         description: Congestion surcharge amount in USD.
+
       - name: airport_fee_usd
         description: Airport pickup fee amount in USD.
+
       - name: pickup_date
         description: Pickup date truncated to day.
+
       - name: dropoff_date
         description: Dropoff date truncated to day.
