@@ -1,5 +1,8 @@
 # NYC Taxi Revenue Analytics
 
+[![dbt CI](https://github.com/laila-kz/end-to-end-analytics-engineering-pipeline/actions/workflows/dbt_ci.yml/badge.svg)](https://github.com/laila-kz/end-to-end-analytics-engineering-pipeline/actions/workflows/dbt_ci.yml)
+[![dbt Docs](https://github.com/laila-kz/end-to-end-analytics-engineering-pipeline/actions/workflows/dbt_docs.yml/badge.svg)](https://github.com/laila-kz/end-to-end-analytics-engineering-pipeline/actions/workflows/dbt_docs.yml)
+
 This repository contains a production-style dbt analytics engineering project built on NYC Yellow Taxi trip data. It transforms raw Snowflake source records into clean staging models, enriched intermediate business metrics, and dimensional fact tables designed for revenue and trip performance analytics.
 
 ---
@@ -158,9 +161,9 @@ This project includes the following key models:
 - `fct_daily_summary.pickup_zone_id` → `dim_taxi_zone.zone_id`
 - `fct_daily_summary.payment_code` joins back to the payment type lookup in staging
 
-### Business logic
+**Business logic**
 
-- `stg_trips` standardizes raw trip JSON, converts timestamps, and applies strict data cleaning.
+- `stg_trips` standardizes raw trip JSON, converts timestamps, and applies strict data cleaning. A deterministic, hash-based `trip_key` is generated to ensure stable row identification across pipeline runs.
 - `int_trips_enriched` adds:
   - pickup/dropoff day, month, year, and hour
   - trip duration and average speed
@@ -195,7 +198,8 @@ This project uses dbt schema tests and model tests to enforce data quality.
 - `accepted_values` tests for fields such as `trip_distance_bucket`, `store_and_forward_flag`, and `payment_code`.
 - Seed tests for `stg_payment_types` and `taxi_zones` ensure lookup data is complete and unique.
 - Custom validation through dbt model logic in fact tables ensures revenue is non-negative and trip records are valid.
-
+- The intermediate model's tests are defined in `intermediate.yml`.
+  
 ### How dbt ensures quality
 
 - dbt schema tests are declared in YAML and executed automatically with `dbt test`.
@@ -220,15 +224,15 @@ This repository includes two GitHub Actions workflows:
 
 ### `dbt_ci.yml`
 
-The CI workflow performs:
+This workflow performs:
 - checkout of repository code
 - Python setup
 - dependency installation from `requirements.txt`
 - `dbt deps`
-- `dbt run --select state:modified+ --state target`
-- `dbt test --select state:modified+ --state target`
+- `dbt run` (full build of all models)
+- `dbt test` (full test suite)
 
-This workflow supports pull request validation by only running models and tests for modified objects, which enables faster feedback while preserving data quality.
+This workflow ensures that every push to `main` and every pull request is validated by a complete build and full test suite. While this is a robust validation strategy, it can be optimized in the future with `state:modified+` for faster CI feedback.
 
 ### `dbt_docs.yml`
 
@@ -374,3 +378,8 @@ dbt docs serve
 - Snowflake-specific implementation with timestamp conversion, date dimensions, and incremental models.
 - CI/CD implemented through GitHub Actions for validation, modified model runs, and docs deployment.
 - Dashboard exposure configured to connect analytics models to Metabase revenue reporting.
+
+## Known Limitations
+
+- **Incremental Fact Tables:** The `fct_trips` model uses an incremental filter based on `pickup_date` (`pickup_date >= max(pickup_date)`). This design assumes data arrives in near real-time or is loaded in batch without significant delays for past dates. It does not currently account for late-arriving records that have an older `pickup_date`. This is a known architectural trade-off made to prioritize processing speed and simplicity for the primary use case of daily reporting.
+- **Source Freshness:** While source freshness checks are defined in the project, they are currently configured with `null` thresholds, making them effectively inactive. This is a planned enhancement for a future release.

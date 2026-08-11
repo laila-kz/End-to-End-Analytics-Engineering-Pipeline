@@ -28,23 +28,19 @@ with source_data as (
         VARIANT_COL:"improvement_surcharge"::numeric(10, 2) as improvement_surcharge,
         VARIANT_COL:"total_amount"::numeric(10, 2) as total_amount,
         VARIANT_COL:"congestion_surcharge"::numeric(10, 2) as congestion_surcharge,
-        VARIANT_COL:"Airport_fee"::numeric(10, 2) as airport_fee,
-        row_number() over (
-          order by
-            VARIANT_COL:"VendorID",
-            VARIANT_COL:"tpep_pickup_datetime",
-            VARIANT_COL:"tpep_dropoff_datetime",
-            VARIANT_COL:"PULocationID",
-            VARIANT_COL:"DOLocationID",
-            VARIANT_COL:"fare_amount",
-            VARIANT_COL:"tip_amount",
-            VARIANT_COL:"total_amount"
-        ) as row_num
+        VARIANT_COL:"Airport_fee"::numeric(10, 2) as airport_fee
     from {{ source('taxi', 'trips') }}
 )
 
 select
-    concat('trip_', to_varchar(row_num)) as trip_key,
+    {{ generate_surrogate_key([
+        'vendorid',
+        'tpep_pickup_datetime',
+        'tpep_dropoff_datetime',
+        'pulocationid',
+        'dolocationid',
+        'fare_amount'
+    ]) }} as trip_key,
     vendorid as vendor_id,
     to_timestamp_ntz(tpep_pickup_datetime / 1000000) as pickup_at,
     to_timestamp_ntz(tpep_dropoff_datetime / 1000000) as dropoff_at,
