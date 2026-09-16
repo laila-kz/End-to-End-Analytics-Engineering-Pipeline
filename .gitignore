@@ -43,3 +43,4 @@ ENV/
 # Exception: Always track dbt seeds
 !seeds/*.csv
 
+Film_Demo_plan.md
