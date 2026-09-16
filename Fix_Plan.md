@@ -1,5 +1,9 @@
 # NYC Taxi Revenue Analytics — Audit Remediation & Fix Guide
 
+
+
+*** 
+
 This guide provides the exact, step-by-step code changes and operational fixes identified in the Senior Staff Data Engineering audit. Every fix includes the target file path, the exact lines to change, a before-and-after comparison, and the engineering rationale.
 
 ---
