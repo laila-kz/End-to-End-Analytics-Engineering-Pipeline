@@ -1,7 +1,8 @@
-{% macro generate_schema_name(schema_name, include_target=false) %}
-  {%- if include_target -%}
-    {{ return((target.name ~ '_' ~ schema_name) | upper) }}
-  {%- else -%}
-    {{ return(schema_name | upper) }}
-  {%- endif -%}
-{% endmacro %}
+{% macro generate_schema_name(custom_schema_name, node) -%}
+    {%- set default_schema = target.schema -%}
+    {%- if custom_schema_name is none -%}
+        {{ default_schema | upper }}
+    {%- else -%}
+        {{ custom_schema_name | trim | upper }}
+    {%- endif -%}
+{%- endmacro %}

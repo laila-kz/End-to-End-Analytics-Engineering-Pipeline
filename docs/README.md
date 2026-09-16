@@ -16,7 +16,7 @@ Complete documentation for the NYC Taxi Analytics dbt project, organized by cate
 - `requirements.txt` - Python dependencies
 
 ### 📝 Models Documentation
-Located in `first_project/models/`:
+Located in `models/`:
 - `staging/` - Raw data transformations
 - `intermediate/` - Business logic and enrichment
 - `marts/` - Analytics-ready tables
@@ -30,7 +30,7 @@ Each model includes:
 ### 🧪 Tests & Quality
 - `tests/` - Custom dbt tests
 - `dbt_project_evaluator/` - Project quality checks
-- 86 data tests across all models
+- 52 declared data tests across all models (+ package evaluator checks)
 - 100% test pass rate
 
 ### 🎨 Generated Artifacts
@@ -43,19 +43,17 @@ Each model includes:
 ## 🚀 Quick Start
 
 1. **View Architecture:**
-   - See `diagrams/architecture/ARCHITECTURE.png`
+   - See `diagrams/architecture/architecture.png`
 
 2. **Explore Schema:**
-   - See `diagrams/erd/ERD.png`
+   - See `diagrams/erd/erd.png`
 
 3. **Understand Models:**
    - See `diagrams/data-model/README.md`
 
 4. **Run dbt Commands:**
    ```bash
-   cd first_project
-   dbt run
-   dbt test
+   dbt build
    dbt docs generate
    ```
 
@@ -63,8 +61,9 @@ Each model includes:
 
 ## 📊 Key Metrics
 
-- **Models:** 8 production + 47 evaluator models
-- **Tests:** 86 total tests with 100% pass rate
+- **Models:** 7 production models
+- **Seeds:** 2 lookup seeds (taxi_zones, stg_payment_types)
+- **Tests:** 52 declared data tests (+ package evaluator checks)
 - **Sources:** 1 (NYC Taxi source)
 - **Exposures:** 1 (Metabase dashboard)
 - **Macros:** 3 (fiscal_year, generate_surrogate_key, generate_schema_name)
@@ -76,19 +75,20 @@ Each model includes:
 
 ```
 project-root/
-├── docs/                           # This folder
+├── docs/                           # Documentation and diagrams
+│   ├── dashboard/                  # Dashboard screenshots and exports
 │   ├── diagrams/                   # Visual diagrams
 │   │   ├── architecture/           # Data pipeline flow
 │   │   ├── erd/                    # Entity relationships
 │   │   └── data-model/             # Model hierarchy
 │   └── README.md                   # Documentation index
-├── first_project/                  # dbt project
-│   ├── models/                     # SQL models
-│   ├── tests/                      # dbt tests
-│   ├── macros/                     # SQL macros
-│   ├── seeds/                      # Lookup tables
-│   └── dbt_project.yml             # Configuration
-├── README.md                       # Main project README
-└── [other files]
+├── macros/                         # SQL macros
+├── models/                         # SQL models (staging, intermediate, marts)
+├── seeds/                          # Lookup tables
+├── tests/                          # dbt tests
+├── dbt_project.yml                 # Configuration
+├── packages.yml                    # Package dependencies
+├── requirements.txt                # Python dependencies
+└── README.md                       # Main project README
 ```
 

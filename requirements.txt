@@ -1,5 +1,6 @@
-dbt-core==1.7.0
-dbt-snowflake==1.7.0
+dbt-core~=1.8.0
+dbt-snowflake~=1.8.0
 protobuf==4.25.3
-sqlfluff==1.4.0
-sqlfluff-templater-dbt==1.4.0
+sqlfluff>=2.0.0
+sqlfluff-templater-dbt>=2.0.0
+

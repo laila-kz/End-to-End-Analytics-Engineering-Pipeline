@@ -12,11 +12,13 @@
 
 with min_max as (
     select
-        min(pickup_date) as min_date,
-        max(dropoff_date) as max_date
+        coalesce(min(pickup_date), '2009-01-01'::date) as min_date,
+        coalesce(least(max(dropoff_date), current_date()), current_date()) as max_date
     from {{ ref('stg_trips') }}
     where pickup_date is not null
       and dropoff_date is not null
+      and pickup_date >= '2009-01-01'
+      and pickup_date <= current_date()
 )
 ,
 date_spine as (

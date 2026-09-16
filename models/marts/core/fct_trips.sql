@@ -38,7 +38,7 @@ dropoff_zone_dim as (
 
 final as (
     select
-        {{ generate_surrogate_key(['trip_key']) }} as trip_sk,
+        trips.trip_key as trip_sk,
 
         -- Foreign keys to dimensions
         trips.pickup_date as pickup_date,

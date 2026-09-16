@@ -13,10 +13,14 @@
 .env.*
 
 # ------------------------------
-# Python (if you have any python tooling)
+# Python (virtual environments & caches)
 # ------------------------------
 *.pyc
 __pycache__/
+.venv/
+venv/
+env/
+ENV/
 
 # ------------------------------
 # IDE / Editors

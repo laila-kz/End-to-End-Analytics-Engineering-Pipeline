@@ -21,6 +21,11 @@ with base as (
         fare_amount_usd as fare_amount_usd,
         trip_distance_miles as trip_distance_miles
     from {{ ref('fct_trips') }}
+    {% if is_incremental() %}
+    where pickup_date >= (
+        select dateadd(day, -30, max(date_day)) from {{ this }}
+    )
+    {% endif %}
 ),
 
 pickup_zone_dim as (
@@ -37,7 +42,7 @@ aggregated as (
         payment_code,
 
         count(*) as trip_count,
-sum(greatest(coalesce(revenue_with_tip, 0), 0)) as total_revenue,
+        sum(greatest(coalesce(revenue_with_tip, 0), 0)) as total_revenue,
         coalesce(
             avg(
                 case 
@@ -69,12 +74,6 @@ final as (
     from aggregated
     left join pickup_zone_dim puzd
         on aggregated.pickup_zone_id = puzd.zone_id
-
-    {% if is_incremental() %}
-    where aggregated.date_day >= (
-        select dateadd(day, -30, max(date_day)) from {{ this }}
-    )
-    {% endif %}
 )
 
 select * from final

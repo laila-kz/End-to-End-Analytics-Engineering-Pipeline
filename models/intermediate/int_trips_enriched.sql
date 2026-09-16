@@ -60,8 +60,8 @@ select
             then trip_distance_miles / (datediff('second', pickup_at, dropoff_at) / 3600.0)
         else null
     end as average_speed_mph,
-    total_amount_usd as revenue_before_tip,
-    total_amount_usd + coalesce(tip_amount_usd, 0) as revenue_with_tip,
+    total_amount_usd - coalesce(tip_amount_usd, 0) as revenue_before_tip,
+    total_amount_usd as revenue_with_tip,
     case
         when trip_distance_miles < 1 then '< 1'
         when trip_distance_miles < 3 then '1-3'

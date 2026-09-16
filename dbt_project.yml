@@ -17,17 +17,16 @@ clean-targets:
 
 models:
   first_project:
-    +database: "{{ env_var('DBT_TARGET_DATABASE', 'RAW') }}"
+    +database: "{{ env_var('DBT_TARGET_DATABASE', target.database) }}"
 
     staging:
-      +database: "{{ env_var('DBT_STAGING_DATABASE', 'RAW') }}"
       +schema: TAXI
       +materialized: view
-      taxi:
-        +materialized: view
 
     intermediate:
-      +database: "{{ env_var('DBT_INTERMEDIATE_DATABASE', 'INTERMEDIATE') }}"
       +schema: TAXI
       +materialized: view
+
+    marts:
+      +schema: TAXI
 

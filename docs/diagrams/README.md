@@ -70,19 +70,20 @@ Text-based documentation including:
 
 ## 📊 Model Statistics
 
-| Layer | Model Count | Purpose |
-|-------|------------|---------|
-| Staging | 3 | Data cleaning & standardization |
+| Layer | Model / Asset Count | Purpose |
+|---|---|---|
+| Seeds | 2 | Static lookup tables (zones, payment types) |
+| Staging | 2 | Data cleaning & standardization |
 | Intermediate | 1 | Enrichment & join logic |
 | Marts | 4 | Dimensional & fact tables |
-| **Total** | **8** | **Analytics-ready tables** |
+| **Total** | **7 Models + 2 Seeds** | **Analytics-ready tables** |
 
 ---
 
 ## 🔗 Related Documentation
 
 - [`README.md`](../../README.md) - Project overview
-- [`dbt_project.yml`](../../first_project/dbt_project.yml) - dbt configuration
-- [`models/`](../../first_project/models/) - Model source code
-- [`tests/`](../../first_project/tests/) - dbt tests
+- [`dbt_project.yml`](../../dbt_project.yml) - dbt configuration
+- [`models/`](../../models/) - Model source code
+- [`tests/`](../../tests/) - dbt tests
 
